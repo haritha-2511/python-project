@@ -1,0 +1,21 @@
+{% extends "admin/layout.html" %}
+{% block admin_content %}
+<div class="row g-3 mb-4">
+  {% for label, value in [('Faculty added', stats.faculty), ('Subjects', stats.subjects), ('Sections', stats.sections), ('Rooms and labs', stats.rooms)] %}
+  <div class="col-6 col-md-3"><div class="card text-center"><div class="card-body">
+    <div class="display-6">{{ value }}</div><div class="text-muted">{{ label }}</div>
+  </div></div></div>
+  {% endfor %}
+</div>
+<div class="card mb-3"><div class="card-body">
+  <h5 class="card-title">Allocation status</h5>
+  <p class="mb-1">Section-subject pairs allocated: <strong>{{ stats.allocated }} / {{ stats.pairs }}</strong></p>
+  <p class="mb-3">Teaching periods needed per week: <strong>{{ stats.needed }}</strong> &middot;
+     Faculty capacity added so far: <strong>{{ stats.capacity }}</strong></p>
+  {% if stats.capacity < stats.needed %}
+  <div class="alert alert-warning mb-3">Faculty capacity is below the periods needed. Add more faculty before running the allocation.</div>
+  {% endif %}
+  <a class="btn btn-primary" href="{{ url_for('admin.allocation') }}">Go to allocation</a>
+  <a class="btn btn-outline-secondary" href="{{ url_for('admin.faculty_add') }}">Add faculty</a>
+</div></div>
+{% endblock %}
