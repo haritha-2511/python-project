@@ -21,7 +21,11 @@
       <tr>
         <td>P{{ p }}<br><small>{{ timings[p] }}</small></td>
         {% for day in days %}
-          <td style="white-space: pre-line;">{{ grid[day][p] }}</td>
+          {% if p in grid[day] %}
+            <td style="white-space: pre-line;">{{ grid[day][p] }}</td>
+          {% else %}
+            <td class="table-light text-muted">College over</td>
+          {% endif %}
         {% endfor %}
       </tr>
 

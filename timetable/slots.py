@@ -1,8 +1,18 @@
 # Days of the week (same names as Member 2's seed_data.py)
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
-# Period numbers
+# Period numbers of a full day
 PERIODS = [1, 2, 3, 4, 5, 6, 7]
+
+# Which periods each day has.
+# Monday and Wednesday: college ends at 1:40 (after period 5).
+DAY_PERIODS = {
+    "Monday":    [1, 2, 3, 4, 5],
+    "Tuesday":   [1, 2, 3, 4, 5, 6, 7],
+    "Wednesday": [1, 2, 3, 4, 5],
+    "Thursday":  [1, 2, 3, 4, 5, 6, 7],
+    "Friday":    [1, 2, 3, 4, 5, 6, 7],
+}
 
 # Time of each period
 TIMINGS = {
@@ -22,15 +32,18 @@ BREAKS = {
     6: "Short Break (02:30 - 02:40)",
 }
 
-# A lab class takes 2 periods in a row. These pairs do not cross a break.
+# A lab class is 2 periods in a row. These pairs do not cross a break.
+# (5, 6) is only possible on days that have a 6th period.
 LAB_PAIRS = [(1, 2), (3, 4), (5, 6)]
 
 
-# Makes an empty timetable: every day, every period is empty
+# Makes an empty timetable.
+# Only the periods that exist on a day are added
+# (so Monday and Wednesday have no 6th and 7th period).
 def build_empty_grid():
     grid = {}
     for day in DAYS:
         grid[day] = {}
-        for period in PERIODS:
+        for period in DAY_PERIODS[day]:
             grid[day][period] = ""
     return grid

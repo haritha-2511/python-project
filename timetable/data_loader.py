@@ -7,6 +7,7 @@
 #   {"section_id": 1, "section": "IT-A",
 #    "subject_id": 5, "subject": "Engineering Physics",
 #    "faculty_id": 3, "faculty": "Dr. Ravi",
+#    "faculty_limit": 16,       # most periods this teacher may take a week
 #    "rooms": ["103"],          # rooms we are allowed to use
 #    "room_type": "Theory",     # "Theory" or "Lab"
 #    "periods": 3}              # periods needed per week
@@ -21,7 +22,7 @@ def get_data():
     with closing(get_db()) as conn:
 
         # Step 1: which lab rooms can be used for which lab type
-        # e.g. {"COMPUTER": ["Computer Lab"], "PHYSICS": ["Physics Lab", ...]}
+        # e.g. {"COMPUTER": ["Computer Lab", "Computer Lab 2"], ...}
         lab_rooms = {}
         for r in conn.execute("SELECT name, lab_uses FROM rooms WHERE room_type = 'Lab'"):
             for lab_type in r["lab_uses"].split(","):
@@ -33,6 +34,7 @@ def get_data():
                    s.id AS subject_id, s.name AS subject,
                    s.theory_periods, s.lab_periods, s.lab_type,
                    f.id AS faculty_id, f.name AS faculty,
+                   f.max_periods AS faculty_limit,
                    home.name AS home_room
             FROM allocations a
             JOIN sections sec ON sec.id = a.section_id
@@ -48,6 +50,7 @@ def get_data():
             "section_id": r["section_id"], "section": r["section"],
             "subject_id": r["subject_id"], "subject": r["subject"],
             "faculty_id": r["faculty_id"], "faculty": r["faculty"],
+            "faculty_limit": r["faculty_limit"],     # weekly working limit
         }
 
         if r["theory_periods"] > 0:

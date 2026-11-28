@@ -18,6 +18,6 @@ def save_timetable(schedule):
                 "INSERT INTO timetable (day, slot, subject_id, faculty_id, room_id, section_id) "
                 "VALUES (?, ?, ?, ?, ?, ?)",
                 (c["day"], c["period"], c["subject_id"], c["faculty_id"],
-                 room_ids[c["room"]], c["section_id"]))
+                 room_ids.get(c["room"]), c["section_id"]))
         conn.commit()
     return len(schedule)
