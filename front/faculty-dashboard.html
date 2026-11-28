@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faculty Dashboard - Timetable & Faculty Workload Management</title>
+  <!-- Bootstrap (ready-made styles) + Bootstrap Icons + our own CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ================= SIDEBAR (same on every faculty page) ================= -->
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="logo"><i class="bi bi-calendar2-check"></i></div>
+    <div>TimeTable Pro<small>Workload Manager</small></div>
+  </div>
+  <!-- These links switch tabs on this same page (Bootstrap tabs, no JS needed) -->
+  <nav class="nav flex-column">
+    <div class="nav-section">Faculty</div>
+    <a class="nav-link active" data-bs-toggle="tab" href="#tabHome"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <a class="nav-link" data-bs-toggle="tab" href="#tabTimetable"><i class="bi bi-calendar3-week"></i>My Timetable</a>
+    <a class="nav-link" data-bs-toggle="tab" href="#tabWorkload"><i class="bi bi-bar-chart-line"></i>My Workload</a>
+    <a class="nav-link" data-bs-toggle="tab" href="#tabLeave"><i class="bi bi-person-x"></i>Apply Leave</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="text-white-50">2026-27 (Odd Semester)</div>
+    <a href="index.html" class="text-white text-decoration-none"><i class="bi bi-box-arrow-left me-1"></i>Logout</a>
+  </div>
+</aside>
+
+<!-- ================= MAIN AREA ================= -->
+<div class="main">
+  <header class="topbar">
+    <!-- menu button: only visible on mobile -->
+    <button class="btn btn-light d-lg-none" onclick="toggleMenu()"><i class="bi bi-list"></i></button>
+    <div>
+      <h1>Faculty Dashboard</h1>
+      <div class="small text-muted">Department of Computer Science &amp; Engineering</div>
+    </div>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <div class="text-end small"><b>Ms. Priya Venkatesh</b><br><span class="text-muted">Assistant Professor</span></div>
+      <div class="avatar">PV</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <!-- 4 tabs on one page. The sidebar links show one "tab-pane" at a time. -->
+    <div class="tab-content">
+
+      <!-- ===== TAB 1: Dashboard ===== -->
+      <div class="tab-pane fade show active" id="tabHome">
+        <h4 class="mb-3">Good morning, Ms. Priya 👋</h4>
+        <!-- BACKEND: GET /api/faculty/F3/summary -->
+        <div class="row g-3 mb-3">
+          <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="icon bg-soft-primary"><i class="bi bi-clock-history"></i></div><div><div class="value">12</div><div class="label">Hrs / week</div></div></div></div>
+          <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="icon bg-soft-success"><i class="bi bi-calendar-day"></i></div><div><div class="value">3</div><div class="label">Classes today</div></div></div></div>
+          <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="icon bg-soft-info"><i class="bi bi-journal-bookmark"></i></div><div><div class="value">2</div><div class="label">Subjects</div></div></div></div>
+          <div class="col-6 col-md-3"><div class="card stat-card h-100"><div class="icon bg-soft-warning"><i class="bi bi-cup-hot"></i></div><div><div class="value">18</div><div class="label">Free periods</div></div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">Today's classes (Monday)</div>
+          <div class="card-body py-1">
+            <div class="class-item"><div class="slot">P1</div><div><b>CS101</b> · CSE-A<br><small class="text-muted">Room A-101 · 09:00 - 09:50</small></div></div>
+            <div class="class-item"><div class="slot">P5</div><div><b>CS102 Lab</b> · CSE-A<br><small class="text-muted">Lab-1 · 13:30 - 14:20</small></div></div>
+            <div class="class-item"><div class="slot">P6</div><div><b>CS102 Lab</b> · CSE-A<br><small class="text-muted">Lab-1 · 14:20 - 15:10</small></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TAB 2: My timetable ===== -->
+      <div class="tab-pane fade" id="tabTimetable">
+        <div class="page-actions no-print"><button class="btn btn-outline-secondary ms-auto" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print</button></div>
+        <!-- BACKEND: GET /api/timetable?faculty=F3 -->
+        <div class="card"><div class="card-body table-responsive">
+          <table class="table table-bordered text-center small mb-0">
+            <thead><tr><th>Day</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th></tr></thead>
+            <tr><td><b>Mon</b></td><td class="table-primary">CS101<br>CSE-A</td><td>-</td><td>-</td><td>-</td><td class="table-primary">CS102<br>Lab-1</td><td class="table-primary">CS102<br>Lab-1</td></tr>
+            <tr><td><b>Tue</b></td><td>-</td><td class="table-primary">CS101<br>CSE-A</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+            <tr><td><b>Wed</b></td><td>-</td><td>-</td><td>-</td><td class="table-primary">CS101<br>CSE-A</td><td>-</td><td>-</td></tr>
+            <tr><td><b>Thu</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+            <tr><td><b>Fri</b></td><td class="table-primary">CS101<br>CSE-A</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          </table>
+        </div></div>
+      </div>
+
+      <!-- ===== TAB 3: My workload ===== -->
+      <div class="tab-pane fade" id="tabWorkload">
+        <!-- BACKEND: GET /api/workload/F3 -->
+        <div class="card mb-3"><div class="card-body">
+          <b>12 of 16 hours</b> used this week <span class="badge bg-soft-success ms-2">Optimal</span>
+          <div class="progress mt-2"><div class="progress-bar bg-success" style="width:75%"></div></div>
+        </div></div>
+        <div class="card">
+          <div class="card-header">Subject-wise hours</div>
+          <table class="table mb-0">
+            <thead><tr><th>Subject</th><th>Section</th><th class="text-end">Hrs / week</th></tr></thead>
+            <tr><td>CS101 Programming in Python</td><td>CSE-A</td><td class="text-end">4</td></tr>
+            <tr><td>CS102 Python Lab</td><td>CSE-A</td><td class="text-end">2</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== TAB 4: Apply leave ===== -->
+      <div class="tab-pane fade" id="tabLeave">
+        <div class="card" style="max-width:500px">
+          <div class="card-header"><i class="bi bi-person-x me-1"></i>Apply for leave</div>
+          <div class="card-body">
+            <label class="form-label">Date</label><input class="form-control mb-3" type="date" name="date">
+            <label class="form-label">Reason</label>
+            <select class="form-select mb-3" name="reason"><option>Sick leave</option><option>Casual leave</option><option>On duty</option></select>
+            <button class="btn btn-primary w-100" onclick="callBackend('POST /api/leaves', 'Faculty F3 applies leave: date, reason')"><i class="bi bi-send me-1"></i>Submit</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- Bootstrap JS (makes modals and tabs work) + our small JS file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
