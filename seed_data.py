@@ -38,6 +38,7 @@ ROOMS = [(str(n), "Classroom", "") for n in (101, 102, 103, 104, 105, 201, 202, 
     ("Physics Lab", "Lab", "PHYSICS"),
     ("Physics & Chemistry Lab", "Lab", "PHYSICS,CHEMISTRY"),
     ("Computer Lab", "Lab", "COMPUTER"),
+    ("Computer Lab 2", "Lab", "COMPUTER"),
     ("Makers Space Lab", "Lab", "MAKERS"),
     ("Electronics & Digital Lab", "Lab", "ELECTRONICS"),
 ]
