@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Staff Leave & Substitutes - Timetable & Faculty Workload Management</title>
+  <!-- Bootstrap (ready-made styles) + Bootstrap Icons + our own CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ================= SIDEBAR (same on every admin page) ================= -->
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="logo"><i class="bi bi-calendar2-check"></i></div>
+    <div>TimeTable Pro<small>Workload Manager</small></div>
+  </div>
+  <nav class="nav flex-column">
+    <div class="nav-section">Overview</div>
+    <a class="nav-link" href="admin-dashboard.html"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <div class="nav-section">Master Data</div>
+    <a class="nav-link" href="manage-faculty.html"><i class="bi bi-person-badge"></i>Faculty</a>
+    <a class="nav-link" href="manage-subjects.html"><i class="bi bi-journal-bookmark"></i>Subjects</a>
+    <a class="nav-link" href="manage-rooms.html"><i class="bi bi-door-open"></i>Rooms</a>
+    <a class="nav-link" href="manage-sections.html"><i class="bi bi-people"></i>Sections</a>
+    <a class="nav-link" href="settings.html"><i class="bi bi-clock"></i>Time Slots</a>
+    <div class="nav-section">Scheduling</div>
+    <a class="nav-link" href="timetable.html"><i class="bi bi-calendar3-week"></i>Timetable Builder</a>
+    <a class="nav-link" href="clashes.html"><i class="bi bi-exclamation-octagon"></i>Clash Report</a>
+    <a class="nav-link active" href="leave.html"><i class="bi bi-person-x"></i>Staff Leave</a>
+    <div class="nav-section">Reports</div>
+    <a class="nav-link" href="workload.html"><i class="bi bi-bar-chart-line"></i>Workload Summary</a>
+    <a class="nav-link" href="reports.html"><i class="bi bi-printer"></i>Timetable Reports</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="text-white-50">2026-27 (Odd Semester)</div>
+    <a href="index.html" class="text-white text-decoration-none"><i class="bi bi-box-arrow-left me-1"></i>Logout</a>
+  </div>
+</aside>
+
+<!-- ================= MAIN AREA ================= -->
+<div class="main">
+  <header class="topbar">
+    <!-- menu button: only visible on mobile -->
+    <button class="btn btn-light d-lg-none" onclick="toggleMenu()"><i class="bi bi-list"></i></button>
+    <div>
+      <h1>Staff Leave & Substitutes</h1>
+      <div class="small text-muted">Department of Computer Science &amp; Engineering</div>
+    </div>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <div class="text-end small"><b>Administrator</b><br><span class="text-muted">Admin</span></div>
+      <div class="avatar">AD</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="row g-3">
+      <!-- Form to mark a staff member on leave -->
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="card-header"><i class="bi bi-person-x me-1"></i>Mark staff leave</div>
+          <div class="card-body">
+            <label class="form-label">Faculty</label>
+            <select class="form-select mb-3" name="facultyId"><option>Ms. Priya Venkatesh</option><option>Mr. Arun Kumar</option><option>Dr. Anitha Raman</option></select>
+            <label class="form-label">Date</label>
+            <input class="form-control mb-3" type="date" name="date">
+            <label class="form-label">Reason</label>
+            <select class="form-select mb-3" name="reason"><option>Sick leave</option><option>Casual leave</option><option>On duty</option></select>
+            <button class="btn btn-outline-primary w-100 mb-2" onclick="callBackend('GET /api/substitutes?facultyId=F3&amp;date=...', 'Find free faculty for each class missed on that day')"><i class="bi bi-search me-1"></i>Find substitutes</button>
+            <button class="btn btn-primary w-100" onclick="callBackend('POST /api/leaves', 'Save leave: facultyId, date, reason, substitutes')"><i class="bi bi-save me-1"></i>Save leave</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <!-- Substitute suggestions (sample). Backend sends free faculty for each period. -->
+        <div class="card mb-3">
+          <div class="card-header">Classes to cover &amp; substitutes</div>
+          <table class="table align-middle mb-0">
+            <thead><tr><th>Period</th><th>Class</th><th>Substitute</th></tr></thead>
+            <tr><td>P1</td><td>CS101 · CSE-A</td><td><select class="form-select form-select-sm"><option>Dr. Karthik (free)</option><option>Dr. Anitha (free)</option></select></td></tr>
+            <tr><td>P5</td><td>CS102 · CSE-A</td><td><select class="form-select form-select-sm"><option>Dr. Anitha (free)</option></select></td></tr>
+          </table>
+        </div>
+
+        <!-- Leave history. BACKEND: GET /api/leaves -->
+        <div class="card">
+          <div class="card-header">Recent leave</div>
+          <table class="table align-middle mb-0">
+            <thead><tr><th>Faculty</th><th>Date</th><th>Reason</th><th></th></tr></thead>
+            <tr><td>Ms. Divya Srinivasan</td><td>25-11-2026</td><td><span class="badge bg-soft-warning">Casual leave</span></td>
+              <td><button class="btn btn-sm btn-light text-danger" onclick="callBackend('DELETE /api/leaves/A1', 'Cancel this leave')"><i class="bi bi-x-lg"></i></button></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Bootstrap JS (makes modals and tabs work) + our small JS file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

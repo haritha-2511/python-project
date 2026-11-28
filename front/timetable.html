@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Timetable Builder - Timetable & Faculty Workload Management</title>
+  <!-- Bootstrap (ready-made styles) + Bootstrap Icons + our own CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ================= SIDEBAR (same on every admin page) ================= -->
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="logo"><i class="bi bi-calendar2-check"></i></div>
+    <div>TimeTable Pro<small>Workload Manager</small></div>
+  </div>
+  <nav class="nav flex-column">
+    <div class="nav-section">Overview</div>
+    <a class="nav-link" href="admin-dashboard.html"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <div class="nav-section">Master Data</div>
+    <a class="nav-link" href="manage-faculty.html"><i class="bi bi-person-badge"></i>Faculty</a>
+    <a class="nav-link" href="manage-subjects.html"><i class="bi bi-journal-bookmark"></i>Subjects</a>
+    <a class="nav-link" href="manage-rooms.html"><i class="bi bi-door-open"></i>Rooms</a>
+    <a class="nav-link" href="manage-sections.html"><i class="bi bi-people"></i>Sections</a>
+    <a class="nav-link" href="settings.html"><i class="bi bi-clock"></i>Time Slots</a>
+    <div class="nav-section">Scheduling</div>
+    <a class="nav-link active" href="timetable.html"><i class="bi bi-calendar3-week"></i>Timetable Builder</a>
+    <a class="nav-link" href="clashes.html"><i class="bi bi-exclamation-octagon"></i>Clash Report</a>
+    <a class="nav-link" href="leave.html"><i class="bi bi-person-x"></i>Staff Leave</a>
+    <div class="nav-section">Reports</div>
+    <a class="nav-link" href="workload.html"><i class="bi bi-bar-chart-line"></i>Workload Summary</a>
+    <a class="nav-link" href="reports.html"><i class="bi bi-printer"></i>Timetable Reports</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="text-white-50">2026-27 (Odd Semester)</div>
+    <a href="index.html" class="text-white text-decoration-none"><i class="bi bi-box-arrow-left me-1"></i>Logout</a>
+  </div>
+</aside>
+
+<!-- ================= MAIN AREA ================= -->
+<div class="main">
+  <header class="topbar">
+    <!-- menu button: only visible on mobile -->
+    <button class="btn btn-light d-lg-none" onclick="toggleMenu()"><i class="bi bi-list"></i></button>
+    <div>
+      <h1>Timetable Builder</h1>
+      <div class="small text-muted">Department of Computer Science &amp; Engineering</div>
+    </div>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <div class="text-end small"><b>Administrator</b><br><span class="text-muted">Admin</span></div>
+      <div class="avatar">AD</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <!-- Choose which timetable to see -->
+    <div class="page-actions no-print">
+      <select class="form-select w-auto"><option>View by Section</option><option>View by Faculty</option><option>View by Room</option></select>
+      <select class="form-select w-auto"><option>CSE-A</option><option>CSE-B</option><option>ECE-A</option></select>
+      <button class="btn btn-outline-primary" onclick="callBackend('GET /api/timetable?section=CSE-A', 'Load the timetable for the selected section / faculty / room')">Load</button>
+      <div class="ms-auto d-flex gap-2">
+        <button class="btn btn-outline-secondary" onclick="callBackend('GET /api/timetable/csv?section=CSE-A', 'Download timetable as CSV file')"><i class="bi bi-filetype-csv me-1"></i>CSV</button>
+        <button class="btn btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print</button>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <!-- The weekly grid. Click any cell to open the pop-up form. -->
+      <div class="col-xl-9">
+        <div class="card">
+          <div class="card-header">Timetable - CSE-A</div>
+          <div class="card-body p-2 table-responsive">
+            <!-- Sample data. BACKEND: GET /api/timetable?section=CSE-A
+                 "filled" = class booked, "clash" = red clash, empty = free -->
+            <table class="tt-grid">
+              <tr><th></th><th>P1<small>09:00</small></th><th>P2<small>09:50</small></th><th>P3<small>10:55</small></th><th>P4<small>11:45</small></th><th>P5<small>13:30</small></th><th>P6<small>14:20</small></th></tr>
+              <tr><td class="day">Mon</td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>CS101</b>Ms. Priya<br>A-101</td>
+                <td class="clash" data-bs-toggle="modal" data-bs-target="#slotModal"><b>MA101</b>Mr. Arun<br>A-101 ⚠</td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>EE101</b>Dr. Lakshmi<br>A-101</td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>CS102</b>Ms. Priya<br>Lab-1</td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>CS102</b>Ms. Priya<br>Lab-1</td></tr>
+              <tr><td class="day">Tue</td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>EN101</b>Ms. Divya<br>A-101</td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>CS101</b>Ms. Priya<br>A-101</td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>MA101</b>Mr. Arun<br>A-101</td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td></tr>
+              <tr><td class="day">Wed</td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>MA101</b>Mr. Arun<br>A-101</td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>EE101</b>Dr. Lakshmi<br>A-101</td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>CS101</b>Ms. Priya<br>A-101</td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td></tr>
+              <tr><td class="day">Thu</td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>EN101</b>Ms. Divya<br>A-101</td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td></tr>
+              <tr><td class="day">Fri</td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>CS101</b>Ms. Priya<br>A-101</td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td class="filled" data-bs-toggle="modal" data-bs-target="#slotModal"><b>MA101</b>Mr. Arun<br>A-101</td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td>
+                <td data-bs-toggle="modal" data-bs-target="#slotModal"></td></tr>
+            </table>
+          </div>
+          <div class="card-footer bg-white small text-muted no-print"><i class="bi bi-hand-index me-1"></i>Click an empty cell to add a class, or a class to edit / remove it. Clashing classes are shown in red.</div>
+        </div>
+      </div>
+
+      <!-- Right side panels -->
+      <div class="col-xl-3 no-print">
+        <div class="card mb-3">
+          <div class="card-header"><i class="bi bi-exclamation-octagon me-1"></i>Clashes</div>
+          <div class="card-body"><div class="clash-item">Mr. Arun Kumar is in CSE-A and CSE-B on Mon P2</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><i class="bi bi-list-check me-1"></i>Subject hours (assigned / required)</div>
+          <div class="card-body small">
+            CS101 <span class="float-end">4 / 4</span><div class="progress mb-2"><div class="progress-bar bg-success" style="width:100%"></div></div>
+            MA101 <span class="float-end">4 / 4</span><div class="progress mb-2"><div class="progress-bar bg-success" style="width:100%"></div></div>
+            EN101 <span class="float-end">2 / 3</span><div class="progress"><div class="progress-bar bg-warning" style="width:66%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Pop-up: add / edit one class ===== -->
+    <div class="modal fade" id="slotModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header"><h6 class="modal-title">Class slot</h6><button class="btn-close" data-bs-dismiss="modal"></button></div>
+          <div class="modal-body">
+            <label class="form-label">Subject</label>
+            <select class="form-select mb-3" name="subjectId"><option>CS101 - Programming in Python</option><option>MA101 - Mathematics I</option><option>EN101 - Technical English</option></select>
+            <label class="form-label">Faculty</label>
+            <select class="form-select mb-3" name="facultyId"><option>Ms. Priya Venkatesh (12 hrs)</option><option>Mr. Arun Kumar (17 hrs)</option><option>Ms. Divya Srinivasan (8 hrs)</option></select>
+            <label class="form-label">Room</label>
+            <select class="form-select mb-3" name="roomId"><option>A-101</option><option>B-201</option><option>Lab-1</option></select>
+            <!-- The backend checks for clashes and sends back a message to show here -->
+            <div class="ok-item"><i class="bi bi-info-circle me-1"></i>Clash check will be done by the backend when you click Save.</div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline-danger me-auto" data-bs-dismiss="modal" onclick="callBackend('DELETE /api/timetable/&lt;slotId&gt;', 'Remove this class from the timetable')"><i class="bi bi-trash me-1"></i>Remove</button>
+            <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary" data-bs-dismiss="modal" onclick="callBackend('POST /api/timetable', 'Save class (sectionId, day, period, subjectId, facultyId, roomId). Backend checks room / faculty / section clash first.')">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Bootstrap JS (makes modals and tabs work) + our small JS file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
