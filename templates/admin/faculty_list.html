@@ -1,0 +1,30 @@
+{% extends "admin/layout.html" %}
+{% block admin_content %}
+<div class="d-flex justify-content-between mb-2">
+  <h4>Faculty</h4>
+  <a class="btn btn-primary" href="{{ url_for('admin.faculty_add') }}">+ Add faculty</a>
+</div>
+<div class="table-responsive">
+<table class="table table-striped align-middle">
+  <thead><tr><th>ID</th><th>Name</th><th>Department</th><th>Can teach</th><th>Assigned / Max periods</th><th></th></tr></thead>
+  <tbody>
+  {% for f in faculty %}
+  <tr>
+    <td>{{ f.faculty_code }}</td><td>{{ f.name }}</td><td>{{ f.department }}</td>
+    <td>{{ f.n_subjects }} subjects</td>
+    <td>{{ f.assigned_periods }} / {{ f.max_periods }}</td>
+    <td class="text-end">
+      <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.faculty_edit', fid=f.id) }}">Edit</a>
+      <form class="d-inline" method="post" action="{{ url_for('admin.faculty_delete', fid=f.id) }}"
+            onsubmit="return confirm('Delete {{ f.name }}?');">
+        <button class="btn btn-sm btn-outline-danger">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6" class="text-center text-muted">No faculty yet. Click "Add faculty".</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

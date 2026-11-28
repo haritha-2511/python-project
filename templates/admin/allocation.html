@@ -1,0 +1,41 @@
+{% extends "admin/layout.html" %}
+{% block admin_content %}
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+  <h4 class="me-auto mb-0">Automatic faculty-subject allocation</h4>
+  <form method="post" action="{{ url_for('admin.allocation_run') }}"><button class="btn btn-primary">Run allocation</button></form>
+  <form method="post" action="{{ url_for('admin.allocation_clear') }}" onsubmit="return confirm('Clear all allocations?');">
+    <button class="btn btn-outline-danger">Clear</button></form>
+</div>
+
+<h5>Faculty workload</h5>
+<table class="table table-sm table-striped w-auto mb-4">
+  <thead><tr><th>ID</th><th>Name</th><th>Department</th><th>Assigned / Max periods</th></tr></thead>
+  <tbody>
+  {% for f in faculty %}
+  <tr><td>{{ f.faculty_code }}</td><td>{{ f.name }}</td><td>{{ f.department }}</td><td>{{ f.assigned_periods }} / {{ f.max_periods }}</td></tr>
+  {% else %}
+  <tr><td colspan="4" class="text-muted">No faculty added yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h5>Section-wise allocation</h5>
+<div class="row g-3">
+  {% for section, rows in by_section.items() %}
+  <div class="col-lg-6">
+    <div class="card h-100"><div class="card-body">
+      <h6 class="card-title">{{ section }}</h6>
+      <table class="table table-sm mb-0">
+        <thead><tr><th>Subject</th><th>Periods</th><th>Faculty</th></tr></thead>
+        <tbody>
+        {% for r in rows %}
+        <tr><td>{{ r.code }} {{ r.subject_name }}</td><td>{{ r.theory_periods + r.lab_periods }}</td>
+            <td>{% if r.faculty_name %}{{ r.faculty_name }} ({{ r.faculty_code }}){% else %}<span class="text-danger">Not allocated</span>{% endif %}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

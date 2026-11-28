@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Admin - Timetable System{% endblock %}
+{% block content %}
+<h2 class="mb-3">Admin Module</h2>
+<ul class="nav nav-pills mb-3">
+  {% for endpoint, label in [('admin.index','Dashboard'), ('admin.faculty_list','Faculty'),
+                             ('admin.subjects_list','Subjects'), ('admin.fixed_data','Fixed data'),
+                             ('admin.allocation','Allocation')] %}
+  <li class="nav-item"><a class="nav-link {{ 'active' if request.endpoint == endpoint }}" href="{{ url_for(endpoint) }}">{{ label }}</a></li>
+  {% endfor %}
+</ul>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{ category }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
+{% block admin_content %}{% endblock %}
+{% endblock %}

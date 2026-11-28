@@ -1,0 +1,30 @@
+{% extends "admin/layout.html" %}
+{% block admin_content %}
+<div class="d-flex justify-content-between mb-2">
+  <h4>Subjects</h4>
+  <a class="btn btn-primary" href="{{ url_for('admin.subject_add') }}">+ Add subject</a>
+</div>
+<div class="table-responsive">
+<table class="table table-striped align-middle">
+  <thead><tr><th>Code</th><th>Name</th><th>Department</th><th>Type</th><th>Theory</th><th>Lab</th><th>Lab held in</th><th>Sections</th><th>Faculty</th><th></th></tr></thead>
+  <tbody>
+  {% for s in subjects %}
+  <tr>
+    <td>{{ s.code }}</td><td>{{ s.name }}</td><td>{{ s.department }}</td><td>{{ s.subject_type }}</td>
+    <td>{{ s.theory_periods }}</td><td>{{ s.lab_periods }}</td>
+    <td>{{ lab_types[s.lab_type] if s.lab_periods else '-' }}</td>
+    <td>{{ s.n_sections }}</td><td>{{ s.n_faculty }}</td>
+    <td class="text-end text-nowrap">
+      <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.subject_edit', sid=s.id) }}">Edit</a>
+      <form class="d-inline" method="post" action="{{ url_for('admin.subject_delete', sid=s.id) }}"
+            onsubmit="return confirm('Delete {{ s.code }}?');">
+        <button class="btn btn-sm btn-outline-danger">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+<p class="text-muted small">"Sections" = how many sections study the subject. "Faculty" = how many faculty can teach it.</p>
+{% endblock %}
