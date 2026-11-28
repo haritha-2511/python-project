@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - Timetable & Faculty Workload Management</title>
+  <!-- Bootstrap (ready-made styles) + Bootstrap Icons + our own CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="login-page">
+
+  <!-- LEFT SIDE: purple welcome panel -->
+  <section class="login-hero">
+    <p class="mb-4"><i class="bi bi-calendar2-check me-2"></i><strong>TimeTable Pro</strong></p>
+    <h1>Timetable &amp; Faculty Workload Management System</h1>
+    <p class="opacity-75">Organise class schedules and monitor teaching workload for your department.</p>
+
+    <div class="feature"><i class="bi bi-grid-3x3-gap"></i><div><b>Timetable builder</b><br><small class="opacity-75">Assign subject, faculty and room to every slot.</small></div></div>
+    <div class="feature"><i class="bi bi-exclamation-octagon"></i><div><b>Clash detection</b><br><small class="opacity-75">Room, faculty and section clashes flagged instantly.</small></div></div>
+    <div class="feature"><i class="bi bi-bar-chart-line"></i><div><b>Workload summary</b><br><small class="opacity-75">Weekly teaching hours vs maximum load for every faculty.</small></div></div>
+  </section>
+
+  <!-- RIGHT SIDE: login form -->
+  <section class="login-form-wrap">
+    <div class="login-card">
+      <h2 class="fw-bold mb-1">Welcome back</h2>
+      <p class="text-muted">Sign in to continue</p>
+
+      <!-- Admin / Faculty switch (Bootstrap "button group" with radio buttons) -->
+      <div class="btn-group w-100 mb-4">
+        <input type="radio" class="btn-check" name="role" id="roleAdmin" checked>
+        <label class="btn btn-outline-primary" for="roleAdmin"><i class="bi bi-shield-lock me-1"></i>Admin</label>
+        <input type="radio" class="btn-check" name="role" id="roleFaculty">
+        <label class="btn btn-outline-primary" for="roleFaculty"><i class="bi bi-person-badge me-1"></i>Faculty</label>
+      </div>
+
+      <!-- onsubmit runs login() from js/app.js -->
+      <form onsubmit="return login()">
+        <label class="form-label">Username / Email</label>
+        <div class="input-group mb-3">
+          <span class="input-group-text"><i class="bi bi-person"></i></span>
+          <input class="form-control" id="username" placeholder="admin or name@college.edu">
+        </div>
+
+        <label class="form-label">Password</label>
+        <div class="input-group mb-2">
+          <span class="input-group-text"><i class="bi bi-lock"></i></span>
+          <input type="password" class="form-control" id="password" placeholder="••••••••">
+        </div>
+
+        <!-- hidden until login fails -->
+        <div class="text-danger small mb-2 d-none" id="loginError">Wrong username or password.</div>
+
+        <button class="btn btn-primary w-100 py-2 mt-2" type="submit">Sign in <i class="bi bi-arrow-right ms-1"></i></button>
+      </form>
+
+      <div class="alert alert-light border small mt-4 mb-0">
+        <b>Demo:</b> Admin <code>admin</code> / <code>admin123</code> ·
+        Faculty <code>priya@college.edu</code> / <code>faculty123</code>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
