@@ -67,15 +67,15 @@ def place_item(schedule, item):
 
 # Exactly ONE library period per class per week.
 # We use the last free period of the week.
-def add_library(schedule, section):
+def add_library(schedule, section, section_id, room):
     for period in reversed(PERIODS):
         for day in reversed(DAYS):
             if period in DAY_PERIODS[day] and not section_busy(schedule, day, period, section):
                 schedule.append({
-                    "section_id": None, "section": section,
+                    "section_id": section_id, "section": section,
                     "subject_id": None, "subject": "Library",
                     "faculty_id": None, "faculty": "",
-                    "room": "Library", "room_type": "",
+                    "room": room, "room_type": "Theory",
                     "day": day, "period": period,
                 })
                 return
@@ -140,8 +140,8 @@ def generate_once(data, labs, theory):
 
     # then, for every class: one library period, then fill all free cells
     for section in get_sections(data):
-        add_library(schedule, section)
         mine = [i for i in theory if i["section"] == section]
+        add_library(schedule, section, mine[0]["section_id"], mine[0]["rooms"][0])
         left = fill_empty_cells(schedule, section, mine)
         for day, period in left:
             problems.append(section + " - " + day + " P" + str(period) +
