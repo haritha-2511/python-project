@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Timetable Reports - Timetable & Faculty Workload Management</title>
+  <!-- Bootstrap (ready-made styles) + Bootstrap Icons + our own CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ================= SIDEBAR (same on every admin page) ================= -->
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="logo"><i class="bi bi-calendar2-check"></i></div>
+    <div>TimeTable Pro<small>Workload Manager</small></div>
+  </div>
+  <nav class="nav flex-column">
+    <div class="nav-section">Overview</div>
+    <a class="nav-link" href="admin-dashboard.html"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <div class="nav-section">Master Data</div>
+    <a class="nav-link" href="manage-faculty.html"><i class="bi bi-person-badge"></i>Faculty</a>
+    <a class="nav-link" href="manage-subjects.html"><i class="bi bi-journal-bookmark"></i>Subjects</a>
+    <a class="nav-link" href="manage-rooms.html"><i class="bi bi-door-open"></i>Rooms</a>
+    <a class="nav-link" href="manage-sections.html"><i class="bi bi-people"></i>Sections</a>
+    <a class="nav-link" href="settings.html"><i class="bi bi-clock"></i>Time Slots</a>
+    <div class="nav-section">Scheduling</div>
+    <a class="nav-link" href="timetable.html"><i class="bi bi-calendar3-week"></i>Timetable Builder</a>
+    <a class="nav-link" href="clashes.html"><i class="bi bi-exclamation-octagon"></i>Clash Report</a>
+    <a class="nav-link" href="leave.html"><i class="bi bi-person-x"></i>Staff Leave</a>
+    <div class="nav-section">Reports</div>
+    <a class="nav-link" href="workload.html"><i class="bi bi-bar-chart-line"></i>Workload Summary</a>
+    <a class="nav-link active" href="reports.html"><i class="bi bi-printer"></i>Timetable Reports</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="text-white-50">2026-27 (Odd Semester)</div>
+    <a href="index.html" class="text-white text-decoration-none"><i class="bi bi-box-arrow-left me-1"></i>Logout</a>
+  </div>
+</aside>
+
+<!-- ================= MAIN AREA ================= -->
+<div class="main">
+  <header class="topbar">
+    <!-- menu button: only visible on mobile -->
+    <button class="btn btn-light d-lg-none" onclick="toggleMenu()"><i class="bi bi-list"></i></button>
+    <div>
+      <h1>Timetable Reports</h1>
+      <div class="small text-muted">Department of Computer Science &amp; Engineering</div>
+    </div>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <div class="text-end small"><b>Administrator</b><br><span class="text-muted">Admin</span></div>
+      <div class="avatar">AD</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="page-actions no-print">
+      <select class="form-select w-auto"><option>All section timetables</option><option>All faculty timetables</option><option>All room timetables</option></select>
+      <button class="btn btn-outline-primary" onclick="callBackend('GET /api/reports?type=sections', 'Get all timetables of the chosen type for printing')">Generate</button>
+      <div class="ms-auto d-flex gap-2">
+        <button class="btn btn-outline-secondary" onclick="callBackend('GET /api/reports/csv?type=sections', 'Download all timetables as CSV')"><i class="bi bi-filetype-csv me-1"></i>Export CSV</button>
+        <button class="btn btn-primary" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print / Save as PDF</button>
+      </div>
+    </div>
+
+    <!-- One card per timetable. Sample: CSE-B -->
+    <div class="card mb-3">
+      <div class="card-header">Section CSE-B · 2026-27 (Odd Semester)</div>
+      <div class="card-body table-responsive">
+        <table class="table table-bordered text-center small mb-0">
+          <thead><tr><th>Day</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th></tr></thead>
+          <tr><td><b>Mon</b></td><td>EN101</td><td>MA101</td><td>CS101</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td><b>Tue</b></td><td>EE101</td><td>MA101</td><td>-</td><td>CS101</td><td>-</td><td>-</td></tr>
+          <tr><td><b>Wed</b></td><td>-</td><td>-</td><td>CS102</td><td>CS102</td><td>-</td><td>-</td></tr>
+          <tr><td><b>Thu</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+          <tr><td><b>Fri</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Bootstrap JS (makes modals and tabs work) + our small JS file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

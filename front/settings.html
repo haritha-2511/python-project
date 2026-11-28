@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Time Slots - Timetable & Faculty Workload Management</title>
+  <!-- Bootstrap (ready-made styles) + Bootstrap Icons + our own CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ================= SIDEBAR (same on every admin page) ================= -->
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="logo"><i class="bi bi-calendar2-check"></i></div>
+    <div>TimeTable Pro<small>Workload Manager</small></div>
+  </div>
+  <nav class="nav flex-column">
+    <div class="nav-section">Overview</div>
+    <a class="nav-link" href="admin-dashboard.html"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <div class="nav-section">Master Data</div>
+    <a class="nav-link" href="manage-faculty.html"><i class="bi bi-person-badge"></i>Faculty</a>
+    <a class="nav-link" href="manage-subjects.html"><i class="bi bi-journal-bookmark"></i>Subjects</a>
+    <a class="nav-link" href="manage-rooms.html"><i class="bi bi-door-open"></i>Rooms</a>
+    <a class="nav-link" href="manage-sections.html"><i class="bi bi-people"></i>Sections</a>
+    <a class="nav-link active" href="settings.html"><i class="bi bi-clock"></i>Time Slots</a>
+    <div class="nav-section">Scheduling</div>
+    <a class="nav-link" href="timetable.html"><i class="bi bi-calendar3-week"></i>Timetable Builder</a>
+    <a class="nav-link" href="clashes.html"><i class="bi bi-exclamation-octagon"></i>Clash Report</a>
+    <a class="nav-link" href="leave.html"><i class="bi bi-person-x"></i>Staff Leave</a>
+    <div class="nav-section">Reports</div>
+    <a class="nav-link" href="workload.html"><i class="bi bi-bar-chart-line"></i>Workload Summary</a>
+    <a class="nav-link" href="reports.html"><i class="bi bi-printer"></i>Timetable Reports</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="text-white-50">2026-27 (Odd Semester)</div>
+    <a href="index.html" class="text-white text-decoration-none"><i class="bi bi-box-arrow-left me-1"></i>Logout</a>
+  </div>
+</aside>
+
+<!-- ================= MAIN AREA ================= -->
+<div class="main">
+  <header class="topbar">
+    <!-- menu button: only visible on mobile -->
+    <button class="btn btn-light d-lg-none" onclick="toggleMenu()"><i class="bi bi-list"></i></button>
+    <div>
+      <h1>Time Slots</h1>
+      <div class="small text-muted">Department of Computer Science &amp; Engineering</div>
+    </div>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <div class="text-end small"><b>Administrator</b><br><span class="text-muted">Admin</span></div>
+      <div class="avatar">AD</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="row g-3">
+      <!-- Periods (time slots) -->
+      <div class="col-lg-7">
+        <div class="card mb-3">
+          <div class="card-header"><i class="bi bi-clock me-1"></i>Periods (time slots)</div>
+          <table class="table align-middle mb-0">
+            <thead><tr><th>Period</th><th>Start</th><th>End</th></tr></thead>
+            <tbody>
+              <tr><td>P1</td><td><input type="time" class="form-control form-control-sm" value="09:00"></td><td><input type="time" class="form-control form-control-sm" value="09:50"></td></tr>
+              <tr><td>P2</td><td><input type="time" class="form-control form-control-sm" value="09:50"></td><td><input type="time" class="form-control form-control-sm" value="10:40"></td></tr>
+              <tr><td>P3</td><td><input type="time" class="form-control form-control-sm" value="10:55"></td><td><input type="time" class="form-control form-control-sm" value="11:45"></td></tr>
+              <tr><td>P4</td><td><input type="time" class="form-control form-control-sm" value="11:45"></td><td><input type="time" class="form-control form-control-sm" value="12:35"></td></tr>
+              <tr><td>P5</td><td><input type="time" class="form-control form-control-sm" value="13:30"></td><td><input type="time" class="form-control form-control-sm" value="14:20"></td></tr>
+              <tr><td>P6</td><td><input type="time" class="form-control form-control-sm" value="14:20"></td><td><input type="time" class="form-control form-control-sm" value="15:10"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Working days -->
+      <div class="col-lg-5">
+        <div class="card mb-3">
+          <div class="card-header"><i class="bi bi-calendar-week me-1"></i>Working days</div>
+          <div class="card-body">
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked> Monday</div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked> Tuesday</div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked> Wednesday</div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked> Thursday</div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" checked> Friday</div>
+            <div class="form-check"><input class="form-check-input" type="checkbox"> Saturday</div>
+          </div>
+        </div>
+        <button class="btn btn-primary w-100" onclick="callBackend('PUT /api/settings', 'Save working days and period start / end times')"><i class="bi bi-save me-1"></i>Save settings</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Bootstrap JS (makes modals and tabs work) + our small JS file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

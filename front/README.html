@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>README - Timetable & Faculty Workload Management</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f5f6fb; }
+    .wrap { max-width: 900px; margin: auto; padding: 2rem 1rem; }
+    h2 { color: #4f46e5; margin-top: 2rem; }
+    pre { background: #1e1b4b; color: #e0e7ff; padding: 1rem; border-radius: 10px; white-space: pre-wrap; font-size: .85rem; }
+    code { color: #4f46e5; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1 class="fw-bold">Timetable &amp; Faculty Workload Management System</h1>
+  <p class="text-muted">Student project · Frontend: HTML + CSS + Bootstrap · Backend: Python (Flask)</p>
+
+  <!-- ===================================================== -->
+  <h2>Part 1 - How the frontend works (beginner guide)</h2>
+
+  <h5 class="mt-3">Files</h5>
+  <table class="table table-bordered bg-white small">
+    <tr><th>File</th><th>What it is</th></tr>
+    <tr><td><code>index.html</code></td><td>Login page (Admin / Faculty)</td></tr>
+    <tr><td><code>admin-dashboard.html</code></td><td>Admin home: numbers, clash alerts, workload, today's classes</td></tr>
+    <tr><td><code>manage-faculty / subjects / rooms / sections.html</code></td><td>List + Add / Edit / Delete (pop-up form)</td></tr>
+    <tr><td><code>settings.html</code></td><td>Periods (time slots) and working days</td></tr>
+    <tr><td><code>timetable.html</code></td><td>Weekly grid. Click a cell to add / edit a class</td></tr>
+    <tr><td><code>clashes.html</code></td><td>Room / faculty / section clash report</td></tr>
+    <tr><td><code>leave.html</code></td><td>Mark staff leave and pick substitutes</td></tr>
+    <tr><td><code>workload.html</code></td><td>Hours per faculty vs maximum hours</td></tr>
+    <tr><td><code>reports.html</code></td><td>Print all timetables</td></tr>
+    <tr><td><code>faculty-dashboard.html</code></td><td>Faculty login page with 4 tabs: Dashboard, My Timetable, My Workload, Apply Leave</td></tr>
+    <tr><td><code>css/style.css</code></td><td>Our colours and layout (sidebar, cards, grid, login)</td></tr>
+    <tr><td><code>js/app.js</code></td><td>The only JS file. 3 small functions</td></tr>
+  </table>
+
+  <h5>Every page has the same 3 parts</h5>
+  <ol>
+    <li><b>Sidebar</b> (<code>&lt;aside class="sidebar"&gt;</code>): menu links. The current page link has class <code>active</code>.</li>
+    <li><b>Topbar</b> (<code>&lt;header class="topbar"&gt;</code>): page title and user name.</li>
+    <li><b>Content</b> (<code>&lt;main class="content"&gt;</code>): the cards, tables and forms of that page.</li>
+  </ol>
+
+  <h5>Bootstrap words used</h5>
+  <ul>
+    <li><code>row</code> + <code>col-md-3</code> → make columns (12 columns = full width).</li>
+    <li><code>card</code> → white box with border. <code>table</code> → nice table. <code>btn btn-primary</code> → blue button.</li>
+    <li><code>data-bs-toggle="modal" data-bs-target="#addModal"</code> → opens the pop-up form. No JS needed.</li>
+    <li><code>data-bs-dismiss="modal"</code> → closes the pop-up.</li>
+    <li><code>data-bs-toggle="tab"</code> → switches tabs on the faculty page.</li>
+    <li><code>mb-3</code> = margin bottom, <code>me-1</code> = margin right, <code>d-none</code> = hide, <code>ms-auto</code> = push to the right.</li>
+  </ul>
+
+  <h5>How the "backend" buttons work</h5>
+  <p>Any button that needs the server has:</p>
+  <pre>&lt;button onclick="callBackend('POST /api/faculty', 'Save new faculty')"&gt;Save&lt;/button&gt;</pre>
+  <p><code>callBackend()</code> (in <code>js/app.js</code>) shows a dark pop-up in the bottom right: <b>"Backend will be called here"</b> + the API name. It also prints it in the browser console (F12). All tables currently show <b>sample data</b> typed directly in the HTML.</p>
+  <p>Form inputs have a <code>name="..."</code>. That name is the exact field name the backend will receive (for example <code>name="maxHours"</code>).</p>
+
+  <h5>Demo login</h5>
+  <p>Admin: <code>admin</code> / <code>admin123</code> · Faculty: <code>priya@college.edu</code> / <code>faculty123</code></p>
+
+  <!-- ===================================================== -->
+  <h2>Part 2 - API list (agree on this with the backend team)</h2>
+  <table class="table table-bordered bg-white small">
+    <tr><th>Method + URL</th><th>Used on</th><th>Sends / returns</th></tr>
+    <tr><td>POST /api/login</td><td>index.html</td><td>{username, password, role} → {ok, role, user}</td></tr>
+    <tr><td>GET /api/dashboard</td><td>admin-dashboard</td><td>counts, clashes, workload, today's classes</td></tr>
+    <tr><td>GET · POST /api/faculty<br>PUT · DELETE /api/faculty/&lt;id&gt;</td><td>manage-faculty</td><td>name, email, department, designation, maxHours</td></tr>
+    <tr><td>GET · POST /api/subjects<br>PUT · DELETE /api/subjects/&lt;id&gt;</td><td>manage-subjects</td><td>code, name, type (Theory/Lab), hoursPerWeek, department</td></tr>
+    <tr><td>GET · POST /api/rooms<br>PUT · DELETE /api/rooms/&lt;id&gt;</td><td>manage-rooms</td><td>name, type (Classroom/Lab), capacity, building</td></tr>
+    <tr><td>GET · POST /api/sections<br>PUT · DELETE /api/sections/&lt;id&gt;</td><td>manage-sections</td><td>name, department, year, strength</td></tr>
+    <tr><td>GET · PUT /api/settings</td><td>settings</td><td>days [ ], periods [{no, start, end}]</td></tr>
+    <tr><td>GET /api/timetable?section= | faculty= | room=</td><td>timetable, faculty-dashboard</td><td>list of slots</td></tr>
+    <tr><td>POST /api/timetable<br>DELETE /api/timetable/&lt;id&gt;</td><td>timetable pop-up</td><td>sectionId, day, period, subjectId, facultyId, roomId → saved slot OR clash error</td></tr>
+    <tr><td>GET /api/clashes</td><td>clashes, dashboard</td><td>[{type, day, period, details}] + warnings</td></tr>
+    <tr><td>GET /api/workload<br>GET /api/workload/&lt;facultyId&gt;</td><td>workload, faculty-dashboard</td><td>theory, lab, total, max, status</td></tr>
+    <tr><td>GET · POST /api/leaves<br>DELETE /api/leaves/&lt;id&gt;</td><td>leave, faculty-dashboard</td><td>facultyId, date, reason, substitutes</td></tr>
+    <tr><td>GET /api/substitutes?facultyId=&amp;date=</td><td>leave</td><td>for each missed period: list of free faculty</td></tr>
+    <tr><td>GET /api/timetable/csv, /api/workload/csv, /api/reports/csv</td><td>CSV buttons</td><td>CSV file download</td></tr>
+  </table>
+
+  <!-- ===================================================== -->
+  <h2>Part 3 - Prompt for the backend team</h2>
+  <p>Copy this and paste it into Claude (or any AI) together with this project folder.</p>
+  <button class="btn btn-primary btn-sm mb-2" onclick="navigator.clipboard.writeText(document.getElementById('prompt').innerText); this.innerText='Copied!'">Copy prompt</button>
+<pre id="prompt">You are helping college students build the BACKEND for a "Timetable and Faculty Workload Management System" for an engineering university. The FRONTEND is already finished (plain HTML + CSS + Bootstrap 5 + one small file js/app.js). Do not change the look of any page.
+
+GOAL
+Build a simple Python Flask backend and connect it to the existing frontend. Code must be beginner level: easy to read, short functions, lots of comments, no advanced patterns.
+
+TECH
+- Python 3, Flask, flask-cors, SQLite (built-in sqlite3 module, no ORM needed).
+- Files: app.py (all routes), database.py (create tables + sample data), timetable.db.
+- Serve the frontend HTML files from Flask too (static folder), so there are no CORS problems.
+- All APIs send and receive JSON.
+
+DATABASE TABLES
+- users (id, username, password, role 'admin'/'faculty', faculty_id)
+- faculty (id, name, email, department, designation, maxHours)
+- subjects (id, code, name, type 'Theory'/'Lab', hoursPerWeek, department)
+- rooms (id, name, type 'Classroom'/'Lab', capacity, building)
+- sections (id, name, department, year, strength)
+- settings (days as JSON text, periods as JSON text [{no, start, end}])
+- timetable (id, sectionId, day, period, subjectId, facultyId, roomId)
+- leaves (id, facultyId, date, reason, substitutes as JSON text)
+Add the same sample data that the HTML pages show (Dr. Anitha Raman, Ms. Priya Venkatesh, Mr. Arun Kumar, CS101, MA101, A-101, Lab-1, CSE-A, CSE-B, etc.). Demo users: admin/admin123 and priya@college.edu/faculty123.
+
+APIs TO BUILD
+1. POST /api/login  {username, password, role} -> {ok, role, user}
+2. GET /api/dashboard -> counts (faculty, subjects, classes per week, clashes), clash list, workload list, today's classes
+3. CRUD for faculty, subjects, rooms, sections:
+   GET /api/<name>  (optional ?search=), POST /api/<name>, PUT /api/<name>/<id>, DELETE /api/<name>/<id>
+4. GET /api/settings, PUT /api/settings
+5. GET /api/timetable?section=<id> or ?faculty=<id> or ?room=<id>
+6. POST /api/timetable {sectionId, day, period, subjectId, facultyId, roomId}
+   BEFORE saving, check clashes on the same day + period:
+   - room clash: same room already booked
+   - faculty clash: same faculty already teaching
+   - section clash: same section already has a class
+   If clash -> return 409 {ok:false, message:"Faculty clash: Mr. Arun Kumar already teaches CSE-B on Monday P2"}
+   Else save and return {ok:true}
+   DELETE /api/timetable/<id>
+7. GET /api/clashes -> all clashes in the whole timetable + warnings (room capacity smaller than section strength, Lab subject in a non-lab room, faculty over maxHours)
+8. GET /api/workload (optional ?department=) and GET /api/workload/<facultyId>
+   For each faculty: theory hours, lab hours, total = number of timetable slots, maxHours, utilisation %, status:
+   Overloaded if total > maxHours, Underloaded if total < 60% of maxHours, else Optimal.
+9. Staff leave: GET /api/leaves, POST /api/leaves {facultyId, date, reason, substitutes}, DELETE /api/leaves/<id>
+   GET /api/substitutes?facultyId=&date= -> for each period that faculty teaches on that weekday, list other faculty who are free in that period and not on leave and not overloaded.
+10. CSV downloads: GET /api/timetable/csv, /api/workload/csv, /api/reports/csv
+
+CONNECTING THE FRONTEND
+- In js/app.js, the function callBackend(api, message) is a placeholder that only shows a pop-up. Every button that needs the server already calls it, for example:
+  onclick="callBackend('POST /api/faculty', 'Save new faculty')"
+- Replace the placeholders with real fetch() calls, page by page. Form inputs already have name="..." attributes that match the API field names above.
+- Replace the sample table rows in each HTML page with rows built from the GET API data (simple JavaScript loops with innerHTML, one small JS file per page is fine, e.g. js/faculty.js).
+- In login() in js/app.js, replace the hard-coded checks with POST /api/login, then save the user in sessionStorage.
+- Show success / error using the same pop-up style (class "api-popup" in css/style.css).
+
+DELIVER
+- Full code for app.py and database.py with comments explaining each part for beginners.
+- requirements.txt
+- Steps to run: pip install -r requirements.txt, python database.py, python app.py, open http://localhost:5000
+- A short test list: how to test each API with the browser or Postman.</pre>
+
+</div>
+</body>
+</html>
