@@ -1,0 +1,43 @@
+{% extends "admin/layout.html" %}
+{% block admin_content %}
+<h4>{{ mode }} faculty</h4>
+<form method="post" class="mt-3">
+  <div class="row g-3 mb-3">
+    <div class="col-md-5">
+      <label class="form-label">Name</label>
+      <input class="form-control" name="name" value="{{ form.name }}" required>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Department</label>
+      <select class="form-select" name="department" required>
+        <option value="">Choose...</option>
+        {% for d in departments %}<option value="{{ d }}" {{ 'selected' if form.department == d }}>{{ d }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Max periods per week</label>
+      <input class="form-control" type="number" min="1" max="35" name="max_periods" value="{{ form.max_periods }}" required>
+    </div>
+  </div>
+
+  <label class="form-label">Subjects this faculty can teach</label>
+  <div class="card mb-3"><div class="card-body">
+    {% for dept, items in subjects|groupby('department') %}
+    <div class="fw-semibold mt-2">{{ dept }}</div>
+    <div class="row">
+      {% for s in items %}
+      <div class="col-md-6">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="subject_ids" value="{{ s.id }}" id="sub{{ s.id }}"
+                 {{ 'checked' if s.id in form.subject_ids }}>
+          <label class="form-check-label" for="sub{{ s.id }}">{{ s.code }} - {{ s.name }}</label>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div></div>
+  <button class="btn btn-primary">Save</button>
+  <a class="btn btn-outline-secondary" href="{{ url_for('admin.faculty_list') }}">Cancel</a>
+</form>
+{% endblock %}
